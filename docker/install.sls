@@ -24,9 +24,8 @@ docker-package:
   pkg.installed:
     - pkgs:
         {%- for pkg in docker_pkg_name %}
-      - {{ pkg }}
+      - {{ pkg }}: {{ docker_pkg_version }}
         {%- endfor %}
-    - version: {{ docker_pkg_version }}
     - refresh: {{ docker.refresh_repo }}
     - require:
       - pkg: docker-package-dependencies
