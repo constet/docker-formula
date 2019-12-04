@@ -21,7 +21,7 @@ docker-package-dependencies:
     - refresh: {{ docker.refresh_repo }}
 
 {%- for pkg in docker_pkg_name %}
-docker-package:
+docker-package-{{ pkg }}:
   pkg.installed:
     - name: {{ pkg }}
     - version: {{ docker_pkg_version or 'latest' }}
