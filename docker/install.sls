@@ -20,7 +20,7 @@ docker-package-dependencies:
     - unless: test "`uname`" = "Darwin"
     - refresh: {{ docker.refresh_repo }}
 
-{%- for pkg in docker_pkg_name %}
+{%- for pkg in docker.pkg.name %}
 docker-package-{{ pkg }}:
   pkg.installed:
     - name: {{ pkg }}
