@@ -22,27 +22,18 @@ docker-package-dependencies:
 
 docker-package:
   pkg.installed:
-    - name: {{ docker_pkg_name }}
-    - version: {{ docker_pkg_version or 'latest' }}
+    - pkgs:
+        {%- for pkg in docker_pkg_name %}
+      - {{ pkg }}
+        {%- endfor %}
+    - version: {{ docker_pkg_version }}
     - refresh: {{ docker.refresh_repo }}
     - require:
       - pkg: docker-package-dependencies
         {%- if grains['os']|lower not in ('amazon', 'fedora', 'suse',) %}
     - pkgrepo: docker-package-repository
         {%- endif %}
-        {%- if grains['os']|lower not in ('suse',) %}
     - allow_updates: {{ docker.pkg.allow_updates }}
-    - hold: {{ docker.pkg.hold }}
-        {%- endif %}
-        {%- if grains.os_family in ('Suse',) %}   ##workaround https://github.com/saltstack-formulas/docker-formula/issues/198
-  cmd.run:
-    - name: /usr/bin/pip install {{ '--upgrade' if docker.pip.upgrade else '' }} pip
-        {%- elif docker.pip.install_pypi_pip %}   ##onlyif you really need pypi pip instead of using official distro pip
-  pip.installed:
-    - name: pip
-    - reload_modules: true
-    - upgrade: {{ docker.pip.upgrade }}
-        {%- endif %}
     - require:
       - pkg: docker-package-dependencies
 
