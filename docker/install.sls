@@ -1,7 +1,7 @@
 {% from "docker/map.jinja" import docker with context %}
 
 {%- set docker_pkg_name = docker.pkg.old_name if docker.use_old_repo else docker.pkg.name %}
-{%- set docker_pkg_version = docker.version | default(docker.pkg.version) %}
+{%- set docker_pkg_version = docker.pkg.version %}
 {%- set docker_packages = docker.kernel.pkgs + docker.pkgs %}
 
 include:
