@@ -1,6 +1,6 @@
 {% from "docker/map.jinja" import docker with context %}
 
-{%- set docker_pkg_name = docker.pkg.name %}
+{%- set docker_pkg_name = docker.pkg.old_name if docker.use_old_repo else docker.pkg.name %}
 {%- set docker_pkg_version = docker.version | default(docker.pkg.version) %}
 {%- set docker_packages = docker.kernel.pkgs + docker.pkgs %}
 
@@ -20,10 +20,9 @@ docker-package-dependencies:
     - unless: test "`uname`" = "Darwin"
     - refresh: {{ docker.refresh_repo }}
 
-{%- for pkg in docker_pkg_name %}
-docker-package-{{ pkg }}:
+docker-package:
   pkg.installed:
-    - name: {{ pkg }}
+    - name: {{ docker_pkg_name }}
     - version: {{ docker_pkg_version or 'latest' }}
     - refresh: {{ docker.refresh_repo }}
     - require:
@@ -46,7 +45,6 @@ docker-package-{{ pkg }}:
         {%- endif %}
     - require:
       - pkg: docker-package-dependencies
-{%- endfor %}
 
   {%- if grains.os != 'MacOS' %}
 docker-config:

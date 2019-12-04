@@ -29,6 +29,8 @@ docker-package-repository:
         {%- else %}
     - refresh_db: True
         {%- endif %}
+    - require_in:
+      - pkg: docker-package
     - require:
       - pkg: docker-package-dependencies
 
@@ -47,6 +49,8 @@ docker-package-repository:
     {% else %}
     - gpgkey: {{ docker.repo.key_url }}
     {% endif %}
+    - require_in:
+      - pkg: docker-package
     - require:
       - pkg: docker-package-dependencies
 
