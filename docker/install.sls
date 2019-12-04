@@ -24,7 +24,8 @@ docker-package:
   pkg.installed:
     - pkgs:
         {%- for pkg in docker_pkg_name %}
-      - {{ pkg }}: {{ docker_pkg_version }}
+      - docker-ce-cli: 1:{{ docker_pkg_version }}
+      - docker-ce: 3:{{ docker_pkg_version }}
         {%- endfor %}
     - refresh: {{ docker.refresh_repo }}
     - require:
